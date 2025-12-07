@@ -5,9 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
-# ============================================================
-# 1. Load Dataset and Split
-# ============================================================
+# Load Dataset and Split
 digits = sklearn.datasets.load_digits()
 X, y = digits.data, digits.target
 
@@ -24,9 +22,7 @@ X_train = scaler.fit_transform(X_train)
 X_val   = scaler.transform(X_val)
 X_test  = scaler.transform(X_test)
 
-# ============================================================
-# 2. Gaussian Generative Classifier
-# ============================================================
+# Gaussian Generative Classifier
 class GaussianGenerativeClassifier:
 
     def fit(self, X, y):
@@ -75,9 +71,7 @@ class GaussianGenerativeClassifier:
         preds = self.predict(X, lam)
         return np.mean(preds == y)
 
-# ============================================================
-# 3. Hyperparameter Tuning (Extended Lambda List)
-# ============================================================
+# Hyperparameter Tuning
 model = GaussianGenerativeClassifier()
 model.fit(X_train, y_train)
 
@@ -95,18 +89,14 @@ for lam in lambda_candidates:
 
 print(f"\nBest λ Selected: {best_lam:.6f}")
 
-# ============================================================
-# 4. Retrain on Train + Validation
-# ============================================================
+# Retrain on Train + Validation
 X_full = np.vstack([X_train, X_val])
 y_full = np.hstack([y_train, y_val])
 
 final_model = GaussianGenerativeClassifier()
 final_model.fit(X_full, y_full)
 
-# ============================================================
-# 5. Final Test Evaluation
-# ============================================================
+# Final Test Evaluation
 test_preds = final_model.predict(X_test, best_lam)
 
 test_acc  = accuracy_score(y_test, test_preds)
@@ -120,11 +110,8 @@ print(f"Precision: {test_prec:.4f}")
 print(f"Recall:    {test_rec:.4f}")
 print(f"F1-Score:  {test_f1:.4f}")
 
+# Confusion Matrix Plot
 cm = confusion_matrix(y_test, test_preds)
-
-# ============================================================
-# 6. Confusion Matrix Plot
-# ============================================================
 plt.figure(figsize=(7, 6))
 plt.imshow(cm, cmap='Blues')
 plt.title(f"Confusion Matrix (λ = {best_lam})")
