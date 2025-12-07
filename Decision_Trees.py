@@ -37,10 +37,11 @@ class Node:
 
 ## Model Implementation
 class DecisionTree:
-    def __init__(self, min_samples_split=2, max_depth=2):
+    def __init__(self, min_samples_split=2, max_depth=2,max_features=None):
         self.min_samples_split=min_samples_split
         self.max_depth=max_depth
         self.root=None
+        self.max_features=max_features
         self.all_gains=[]
         
     def fit(self, X, y):
@@ -72,10 +73,13 @@ class DecisionTree:
         best_overall_gain = -1
         best_feature = None
         best_threshold = None
+        if self.max_features is None or self.max_features > n_features:
+            features_to_consider = range(n_features)
+        else:
+            features_to_consider = np.random.choice(n_features, self.max_features, replace=False)
 
 
-
-        for feature in range(n_features):
+        for feature in features_to_consider:
 
             # Compute all possible midpoints for this feature
             values = np.sort(np.unique(X[:, feature]))
@@ -225,5 +229,5 @@ def run_decision_tree():
     evaluate_performance(y_test, test_preds)
     final_tree.ranked_features()
      
-run_decision_tree()
+
     
