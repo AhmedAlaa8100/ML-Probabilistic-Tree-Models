@@ -101,7 +101,7 @@ class DecisionTree:
                     best_feature_gain = gain
 
             # Save best gain of this feature for feature ranking
-            self.all_gains[feature] = best_feature_gain
+            self.all_gains[feature]+= best_feature_gain*n_samples
 
         return best_feature, best_threshold
 
@@ -228,6 +228,7 @@ def run_decision_tree():
     test_preds = final_tree.predict(X_test)
     evaluate_performance(y_test, test_preds)
     final_tree.ranked_features()
+run_decision_tree()
      
 
     
